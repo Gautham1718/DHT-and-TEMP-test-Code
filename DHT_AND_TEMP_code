@@ -1,0 +1,113 @@
+#include "DHT.h"
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include "PCF8574.h"
+#define DHTPIN 25  // Digital pin connected to the DHT sensor
+// Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
+// Pin 15 can work but DHT must be disconnected during program upload.
+#define ONE_WIRE_BUS 25
+// Uncomment whatever type you're using!
+#define DHTTYPE DHT11   // DHT 11
+//#define DHTTYPE DHT22  // DHT 22  (AM2302), AM2321
+//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+OneWire oneWire(ONE_WIRE_BUS);
+
+// Pass our oneWire reference to Dallas Temperature.
+DallasTemperature sensors(&oneWire);
+
+
+DHT dht(DHTPIN, DHTTYPE);
+PCF8574 pcf_sensor('add following  I2C addresses');
+void setup() {
+  Serial.begin(115200);
+  pcf_sensor.pinMode(P0, OUTPUT);
+  pcf_sensor.pinMode(P1, OUTPUT);
+  pcf_sensor.pinMode(P2, OUTPUT);
+  pcf_sensor.pinMode(P3, OUTPUT);
+  pcf_sensor.pinMode(P4, OUTPUT);
+  pcf_sensor.pinMode(P5, OUTPUT);
+  pcf_sensor.pinMode(P6, OUTPUT);
+  pcf_sensor.pinMode(P7, OUTPUT);
+  pcf_sensor.begin();
+  Serial.print("Test");
+  delay(1000);
+
+  pcf_sensor.digitalWrite(Pin Num, LOW); // ADD THE PIN NUMBER WHICH WANT TO KEPT LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW); // ADD THE PIN NUMBER WHICH WANT TO KEPT LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW); // ADD THE PIN NUMBER WHICH WANT TO KEPT LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW); // ADD THE PIN NUMBER WHICH WANT TO KEPT LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW); // ADD THE PIN NUMBER WHICH WANT TO KEPT LOW
+  Serial.begin(115200);
+  Serial.println("Dallas Temperature IC Control Library Demo");
+
+  // Start up the library
+  sensors.begin();
+  Serial.println(F("DHTxx test!"));
+  pinMode(DHTPIN, INPUT);
+  dht.begin();
+}
+
+void loop() {
+  pcf_sensor.digitalWrite(Pin Num, LOW AND HIGH); // ADD THE PIN NUMBER AND SET IT AS HIGH OR LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW AND HIGH); // ADD THE PIN NUMBER AND SET IT AS HIGH OR LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW AND HIGH); // ADD THE PIN NUMBER AND SET IT AS HIGH OR LOW
+  delay(1000);
+
+
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  float h = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  float t = dht.readTemperature();
+  // Read temperature as Fahrenheit (isFahrenheit = true)
+  float f = dht.readTemperature(true);
+
+  // Check if any reads failed and exit early (to try again).
+  if (isnan(h) || isnan(t) || isnan(f)) {
+    Serial.println(F("Failed to read from DHT sensor!"));
+    return;
+  }
+
+  // Compute heat index in Fahrenheit (the default)
+  float hif = dht.computeHeatIndex(f, h);
+  // Compute heat index in Celsius (isFahreheit = false)
+  float hic = dht.computeHeatIndex(t, h, false);
+
+  Serial.print(F("Humidity: "));
+  Serial.print(h);
+  Serial.print(F("%  Temperature: "));
+  Serial.print(t);
+  Serial.print(F("°C "));
+  Serial.print(f);
+  Serial.print(F("°F  Heat index: "));
+  Serial.print(hic);
+  Serial.print(F("°C "));
+  Serial.print(hif);
+  Serial.println(F("°F"));
+
+  pcf_sensor.digitalWrite(Pin Num, LOW AND HIGH); // ADD THE PIN NUMBER AND SET IT AS HIGH OR LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW AND HIGH); // ADD THE PIN NUMBER AND SET IT AS HIGH OR LOW
+  pcf_sensor.digitalWrite(Pin Num, LOW AND HIGH); // ADD THE PIN NUMBER AND SET IT AS HIGH OR LOW
+  // Wait a few seconds between measurements.
+  delay(2000);
+
+  // call sensors.requestTemperatures() to issue a global temperature
+  // request to all devices on the bus
+  Serial.print("Requesting temperatures...");
+  sensors.requestTemperatures();  // Send the command to get temperatures
+  Serial.println("DONE");
+  // After we got the temperatures, we can print them here.
+  // We use the function ByIndex, and as an example get the temperature from the first sensor only.
+  float tempC = sensors.getTempCByIndex(0);
+
+  // Check if reading was successful
+  if (tempC != DEVICE_DISCONNECTED_C) {
+    Serial.print("Temperature for the device 1 (index 0) is: ");
+
+    Serial.println(tempC);
+
+  } else {
+    Serial.println("Error: Could not read temperature data");
+  }
+  delay(2000);
+}
